@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie – Orange Pillsen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --accent-orange: #FF7F00;
+            --accent-glow: rgba(255, 127, 0, 0.4);
+            --accent-gold: #D4AF37;
+            --text-light: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            background: radial-gradient(circle at 15% 50%, rgba(255, 127, 0, 0.08), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05), transparent 50%),
+                var(--bg-dark);
+            background-size: 200% 200%;
+            animation: bg-shift 15s ease infinite alternate;
+        }
+
+        @keyframes bg-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .page-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+            animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 36px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--accent-orange); }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .page-header { margin-bottom: 48px; }
+
+        .page-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #FF7F00, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .accordion-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+
+        .accordion-item.open {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 127, 0, 0.08);
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 28px;
+            cursor: pointer;
+            user-select: none;
+            gap: 16px;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover { background: rgba(255, 255, 255, 0.03); }
+
+        .accordion-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .accordion-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .accordion-chevron {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, background 0.3s, border-color 0.3s;
+        }
+
+        .accordion-chevron svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--text-muted);
+            transition: fill 0.3s;
+        }
+
+        .accordion-item.open .accordion-chevron {
+            transform: rotate(180deg);
+            background: rgba(255, 127, 0, 0.15);
+            border-color: var(--accent-orange);
+        }
+
+        .accordion-item.open .accordion-chevron svg { fill: var(--accent-orange); }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .accordion-body-inner {
+            padding: 0 28px 28px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .photo-thumb {
+            aspect-ratio: 4/3;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        }
+
+        .photo-thumb:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 127, 0, 0.2);
+            border-color: rgba(255, 127, 0, 0.4);
+        }
+
+        .photo-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            display: block;
+        }
+
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lightbox-close:hover { background: rgba(255, 127, 0, 0.2); }
+
+        .lightbox-close svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+        }
+
+        .lightbox-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lightbox-nav:hover { background: rgba(255, 127, 0, 0.2); }
+
+        .lightbox-nav svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .lightbox-prev { left: 16px; }
+        .lightbox-next { right: 16px; }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <a href="poster.html" class="back-link">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Zpět na poster
+        </a>
+
+        <div class="page-header">
+            <h1>Galerie</h1>
+            <p>Orange Pillsen &mdash; fotky a slidy z přednášek</p>
+        </div>
+
+        <div class="accordion">
+
+            <!-- PŘEDNÁŠKA 0 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div>
+                        <div class="accordion-title">prednaska0</div>
+                        <div class="accordion-meta">5 souborů</div>
+                    </div>
+                    <div class="accordion-chevron">
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <div class="photo-grid">
+                            <div class="photo-thumb" onclick="openLightbox(0, 0)"><img src="galerie/prednaska0soubor0.png" alt="Slide 0"></div>
+                            <div class="photo-thumb" onclick="openLightbox(0, 1)"><img src="galerie/prednaska0soubor1.png" alt="Slide 1"></div>
+                            <div class="photo-thumb" onclick="openLightbox(0, 2)"><img src="galerie/prednaska0soubor2.png" alt="Slide 2"></div>
+                            <div class="photo-thumb" onclick="openLightbox(0, 3)"><img src="galerie/prednaska0soubor3.png" alt="Slide 3"></div>
+                            <div class="photo-thumb" onclick="openLightbox(0, 4)"><img src="galerie/prednaska0soubor4.png" alt="Slide 4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PŘEDNÁŠKA 1 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div>
+                        <div class="accordion-title">prednaska1</div>
+                        <div class="accordion-meta">5 souborů</div>
+                    </div>
+                    <div class="accordion-chevron">
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <div class="photo-grid">
+                            <div class="photo-thumb" onclick="openLightbox(1, 0)"><img src="galerie/prednaska1soubor0.png" alt="Slide 0"></div>
+                            <div class="photo-thumb" onclick="openLightbox(1, 1)"><img src="galerie/prednaska1soubor1.png" alt="Slide 1"></div>
+                            <div class="photo-thumb" onclick="openLightbox(1, 2)"><img src="galerie/prednaska1soubor2.png" alt="Slide 2"></div>
+                            <div class="photo-thumb" onclick="openLightbox(1, 3)"><img src="galerie/prednaska1soubor3.png" alt="Slide 3"></div>
+                            <div class="photo-thumb" onclick="openLightbox(1, 4)"><img src="galerie/prednaska1soubor4.png" alt="Slide 4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PŘEDNÁŠKA 2 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div>
+                        <div class="accordion-title">prednaska2</div>
+                        <div class="accordion-meta">5 souborů</div>
+                    </div>
+                    <div class="accordion-chevron">
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <div class="photo-grid">
+                            <div class="photo-thumb" onclick="openLightbox(2, 0)"><img src="galerie/prednaska2soubor0.png" alt="Slide 0"></div>
+                            <div class="photo-thumb" onclick="openLightbox(2, 1)"><img src="galerie/prednaska2soubor1.png" alt="Slide 1"></div>
+                            <div class="photo-thumb" onclick="openLightbox(2, 2)"><img src="galerie/prednaska2soubor2.png" alt="Slide 2"></div>
+                            <div class="photo-thumb" onclick="openLightbox(2, 3)"><img src="galerie/prednaska2soubor3.png" alt="Slide 3"></div>
+                            <div class="photo-thumb" onclick="openLightbox(2, 4)"><img src="galerie/prednaska2soubor4.png" alt="Slide 4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PŘEDNÁŠKA 3 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div>
+                        <div class="accordion-title">prednaska3</div>
+                        <div class="accordion-meta">5 souborů</div>
+                    </div>
+                    <div class="accordion-chevron">
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <div class="photo-grid">
+                            <div class="photo-thumb" onclick="openLightbox(3, 0)"><img src="galerie/prednaska3soubor0.png" alt="Slide 0"></div>
+                            <div class="photo-thumb" onclick="openLightbox(3, 1)"><img src="galerie/prednaska3soubor1.png" alt="Slide 1"></div>
+                            <div class="photo-thumb" onclick="openLightbox(3, 2)"><img src="galerie/prednaska3soubor2.png" alt="Slide 2"></div>
+                            <div class="photo-thumb" onclick="openLightbox(3, 3)"><img src="galerie/prednaska3soubor3.png" alt="Slide 3"></div>
+                            <div class="photo-thumb" onclick="openLightbox(3, 4)"><img src="galerie/prednaska3soubor4.png" alt="Slide 4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PŘEDNÁŠKA 4 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div>
+                        <div class="accordion-title">prednaska4</div>
+                        <div class="accordion-meta">5 souborů</div>
+                    </div>
+                    <div class="accordion-chevron">
+                        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <div class="photo-grid">
+                            <div class="photo-thumb" onclick="openLightbox(4, 0)"><img src="galerie/prednaska4soubor0.png" alt="Slide 0"></div>
+                            <div class="photo-thumb" onclick="openLightbox(4, 1)"><img src="galerie/prednaska4soubor1.png" alt="Slide 1"></div>
+                            <div class="photo-thumb" onclick="openLightbox(4, 2)"><img src="galerie/prednaska4soubor2.png" alt="Slide 2"></div>
+                            <div class="photo-thumb" onclick="openLightbox(4, 3)"><img src="galerie/prednaska4soubor3.png" alt="Slide 3"></div>
+                            <div class="photo-thumb" onclick="openLightbox(4, 4)"><img src="galerie/prednaska4soubor4.png" alt="Slide 4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+        <div class="lightbox-close" onclick="closeLightbox()">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+        <div class="lightbox-nav lightbox-prev" onclick="lbNav(-1)">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </div>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <div class="lightbox-nav lightbox-next" onclick="lbNav(1)">
+            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </div>
+    </div>
+
+    <script>
+        // --- ACCORDION ---
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.closest('.accordion-item');
+                const body = item.querySelector('.accordion-body');
+                const isOpen = item.classList.contains('open');
+
+                if (isOpen) {
+                    item.classList.remove('open');
+                    body.style.maxHeight = '0';
+                } else {
+                    item.classList.add('open');
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // --- LIGHTBOX ---
+        const sections = [
+            [
+                'galerie/prednaska0soubor0.png',
+                'galerie/prednaska0soubor1.png',
+                'galerie/prednaska0soubor2.png',
+                'galerie/prednaska0soubor3.png',
+                'galerie/prednaska0soubor4.png',
+            ],
+            [
+                'galerie/prednaska1soubor0.png',
+                'galerie/prednaska1soubor1.png',
+                'galerie/prednaska1soubor2.png',
+                'galerie/prednaska1soubor3.png',
+                'galerie/prednaska1soubor4.png',
+            ],
+            [
+                'galerie/prednaska2soubor0.png',
+                'galerie/prednaska2soubor1.png',
+                'galerie/prednaska2soubor2.png',
+                'galerie/prednaska2soubor3.png',
+                'galerie/prednaska2soubor4.png',
+            ],
+            [
+                'galerie/prednaska3soubor0.png',
+                'galerie/prednaska3soubor1.png',
+                'galerie/prednaska3soubor2.png',
+                'galerie/prednaska3soubor3.png',
+                'galerie/prednaska3soubor4.png',
+            ],
+            [
+                'galerie/prednaska4soubor0.png',
+                'galerie/prednaska4soubor1.png',
+                'galerie/prednaska4soubor2.png',
+                'galerie/prednaska4soubor3.png',
+                'galerie/prednaska4soubor4.png',
+            ],
+        ];
+
+        let currentSection = 0;
+        let currentIndex = 0;
+
+        function openLightbox(section, index) {
+            currentSection = section;
+            currentIndex = index;
+            document.getElementById('lightbox-img').src = sections[section][index];
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.getElementById('lightbox-img').src = '';
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOnBg(e) {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        }
+
+        function lbNav(dir) {
+            const arr = sections[currentSection];
+            currentIndex = (currentIndex + dir + arr.length) % arr.length;
+            document.getElementById('lightbox-img').src = arr[currentIndex];
+        }
+
+        document.addEventListener('keydown', e => {
+            const lb = document.getElementById('lightbox');
+            if (!lb.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lbNav(-1);
+            if (e.key === 'ArrowRight') lbNav(1);
+        });
+    </script>
+
+</body>
+
+</html>

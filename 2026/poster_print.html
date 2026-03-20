@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Orange Pillsen 2026 - Tisk</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        @page {
+            size: A4 landscape;
+            /* Vodorovný formát A4 */
+            margin: 0;
+            /* Žádné margíny (okraje prohlížeče) */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            width: 297mm;
+            height: 210mm;
+            background: #ffffff;
+            color: #111111;
+            display: flex;
+            overflow: hidden;
+            /* Zamezí rozdělení na další stránky */
+        }
+
+        /* LEVÝ PANEL - TMAVÝ */
+        .left-panel {
+            width: 35%;
+            height: 100%;
+            background-color: #0a0a0a;
+            color: #fff;
+            padding: 15mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 5px;
+            background: #FF7F00;
+        }
+
+        .top-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 8pt;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 5mm;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .top-subtitle strong {
+            color: #FF7F00;
+        }
+
+        .logo-img {
+            width: 100%;
+            border-radius: 5px;
+            border: 2px solid #FF7F00;
+            margin-bottom: 5mm;
+            object-fit: cover;
+            aspect-ratio: 1;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32pt;
+            font-weight: 900;
+            line-height: 0.9;
+            color: #FF7F00;
+            margin-bottom: 8mm;
+            text-transform: uppercase;
+        }
+
+        .main-title span {
+            font-size: 40pt;
+            color: #fff;
+            display: block;
+            margin-top: -5px;
+        }
+
+        .info-row {
+            margin-bottom: 5mm;
+        }
+
+        .info-row h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10pt;
+            color: #FF7F00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .info-row p {
+            font-size: 10pt;
+            line-height: 1.4;
+            color: #ddd;
+        }
+
+        .info-row p strong {
+            color: #fff;
+        }
+
+        .sponsors {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 5px;
+        }
+
+        .sponsors img {
+            max-width: 120px;
+            background: #222;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        /* PRAVÝ PANEL - SVĚTLÝ S PROGRAMEM */
+        .right-panel {
+            width: 65%;
+            height: 100%;
+            padding: 15mm;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Dva sloupce */
+            grid-template-rows: 1fr 1fr;
+            /* Dva řádky */
+            gap: 10mm;
+            background-color: #fafafa;
+        }
+
+        .session {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 6mm;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .session h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12pt;
+            color: #222;
+            text-transform: uppercase;
+            border-bottom: 2px solid #FF7F00;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        .session p {
+            font-size: 9.5pt;
+            line-height: 1.5;
+            color: #555;
+            flex-grow: 1;
+            /* Zabere volné místo a odtlačí jméno dolů */
+            margin-bottom: 10px;
+        }
+
+        .speaker-info {
+            display: flex;
+            align-items: center;
+            background: #f4f4f4;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .speaker-portrait {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #FF7F00;
+            margin-right: 10px;
+            background-color: #fff;
+        }
+
+        .speaker-text {
+            font-size: 9pt;
+            color: #777;
+            font-style: italic;
+        }
+
+        .speaker-text strong {
+            font-style: normal;
+            color: #111;
+            font-weight: 700;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left-panel">
+        <div>
+            <div class="top-subtitle">Plzeňská <strong>JEDNADVACET.ORG</strong> vás zve</div>
+            <!-- Zde použijeme statický obrázek, ten se tiskne na papír lépe než video ukázka -->
+            <img class="logo-img" src="Orange_pillsen_logo.jpg" alt="Logo Orange Pillsen">
+
+            <div class="main-title">
+                Orange<br>Pillsen
+                <span>2026</span>
+            </div>
+
+            <div class="info-row">
+                <h3>Kdy</h3>
+                <p><strong>Sobota, 23.4.2026</strong><br>Začátek od 17:00<br>Vstup volný</p>
+            </div>
+
+            <div class="info-row">
+                <h3>Kde</h3>
+                <p><strong>TechTower</strong>, místnost Z6<br>Koterovská 152, Plzeň 2</p>
+            </div>
+        </div>
+
+        <div class="sponsors">
+            <h3 style="font-family: Montserrat; font-size: 8pt; color:#aaa; margin-bottom: 3px;">Sponzor:</h3>
+            <img src="galosoft_logo.svg" onerror="this.src='galosoft_logo.jpg';" alt="GaloSoft Logo">
+        </div>
+    </div>
+
+    <div class="right-panel">
+
+        <div class="session">
+            <h3>Kaspa V.S. Bitcoin</h3>
+            <p>Proč je Bitcoin králem bezpečnosti a decentralizace a jaké technologické kompromisy přináší Kaspa ve své
+                snaze o radikálně vyšší rychlost sítě?</p>
+            <div class="speaker-info">
+                <img src="david_kacetl.jpg" alt="David Kacetl" class="speaker-portrait">
+                <div class="speaker-text">Přednášející: <strong>David Kacetl</strong> programátor</div>
+            </div>
+        </div>
+
+        <div class="session">
+            <h3>Kryptoanarchismus</h3>
+            <p>Pohled do historie hnutí cypherpunks. Jak myšlenky svobody, důraz na soukromí a odpor k centrální
+                autoritě formovaly vznik Bitcoinu a proč jsou tyto principy dnes důležitější než dříve.</p>
+            <div class="speaker-info">
+                <img src="luk_cogito.jpg" alt="Luk Cogito" class="speaker-portrait">
+                <div class="speaker-text">Přednášející: <strong>Luk Cogito</strong><br>&nbsp;</div>
+                <!-- Mezera pro správné zarovnání výšky -->
+            </div>
+        </div>
+
+        <div class="session">
+            <h3>Seedsigner</h3>
+            <p>Jak si z levných a dostupných součástek postavit plně funkční a bezpečnou hardwarovou peněženku. Čistě
+                open-source a "Udělej si sám" přístup rovnou z praxe.</p>
+            <div class="speaker-info">
+                <img src="Martin_blass.jpg" alt="Martin Blass" class="speaker-portrait">
+                <div class="speaker-text">Přednášející: <strong>Martin Blass</strong><br>&nbsp;</div>
+            </div>
+        </div>
+
+        <div class="session">
+            <h3>Eko. škola & Mining</h3>
+            <p>Těžba Bitcoinu optikou zdravých peněz a svobodného trhu. Jak mining motivuje k efektivnímu nakládání s
+                energií, posiluje síť a co by na to řekli klasikové rakouské ekonomické školy.</p>
+            <div class="speaker-info">
+                <img src="franta_kohout_linked_in.jpg" alt="František Kohout" class="speaker-portrait">
+                <div class="speaker-text">Přednášející: <strong>František Kohout</strong> nadšenec do miningu</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
